@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "526952393499",
+    "project_id": "uplink-7ab45",
+    "storage_bucket": "uplink-7ab45.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526952393499:android:04fd91cee6ffc9f39641be",
+        "android_client_info": {
+          "package_name": "com.example.uplink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526952393499-acfh36cmia38i54h238g4sn73bt52lui.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBoTcZGiemShKvdWrbVgTZbYlzayS0ty78"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526952393499-acfh36cmia38i54h238g4sn73bt52lui.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
