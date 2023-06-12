@@ -6,7 +6,7 @@ class ViewPostByUserIdUseCase {
 
   ViewPostByUserIdUseCase(this.postRepository);
 
-  Future<List<Post>> execute(String userId) async {
+  Future<List<Post>> execute(int userId) async {
     return await postRepository.getPostsByUserId(userId);
   }
 }

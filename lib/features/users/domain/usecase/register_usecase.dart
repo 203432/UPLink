@@ -1,4 +1,4 @@
-import '../entities/userD.dart';
+import '../entities/user.dart';
 import '../repositories/user_repository.dart';
 
 class RegisterUseCase {
@@ -6,7 +6,8 @@ class RegisterUseCase {
 
   RegisterUseCase(this.userRepository);
 
-  Future<void> execute(UserD user) async {
-    return await userRepository.createUser(user);
+  Future<void> execute(User user) async {
+    print('Esta entrand al bloc');
+    return await userRepository.register(user);
   }
 }

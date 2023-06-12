@@ -1,8 +1,11 @@
-import '../entities/userD.dart';
+import 'package:uplink/features/users/domain/entities/authentication.dart';
+
+import '../entities/user.dart';
 
 abstract class UserRepository {
-  Future<void> createUser(UserD user);
-  Future<UserD> findUserByUsername(String username);
-  Future<void> updateUser(UserD user);
+  Future<void> register(User user);
+  Future<User> findUserByUsername(String username);
+  Future<void> updateUser(User user);
   Future<void> deleteUser(String userId);
+  Future<Authentication> login(String username, String password);
 }

@@ -5,5 +5,5 @@ abstract class PostRepository {
   Future<Post> findPostByContent(String content);
   Future<void> updatePost(Post post);
   Future<void> deletePost(String postId);
-  Future<List<Post>> getPostsByUserId(String userId);
+  Future<List<Post>> getPostsByUserId(int userId);
 }

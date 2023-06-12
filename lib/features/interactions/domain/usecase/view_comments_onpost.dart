@@ -6,7 +6,7 @@ class ViewCommentsOnPostUseCase {
 
   ViewCommentsOnPostUseCase(this.commentRepository);
 
-  Future<List<Comment>> execute(String postId) async {
+  Future<List<Comment>> execute(int postId) async {
     return await commentRepository.getCommentByPostId(postId);
   }
 }

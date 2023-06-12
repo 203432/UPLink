@@ -1,15 +1,15 @@
 class Comment {
   int id;
-  int userId;
-  int postId;
+  int user;
+  int post;
   String text;
 
 
 
   Comment({
  required this.id,
- required this.userId,
- required this.postId,
+ required this.user,
+ required this.post,
  required this.text,
   });
 }

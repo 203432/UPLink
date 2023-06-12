@@ -1,4 +1,4 @@
-import 'package:uplink/features/users/domain/entities/userD.dart';
+import 'package:uplink/features/users/domain/entities/authentication.dart';
 
 import '../repositories/user_repository.dart';
 
@@ -7,7 +7,7 @@ class LoginUseCase {
 
   LoginUseCase(this.userRepository);
 
-  Future<UserD> execute(String username, String password) async {
-    return await userRepository.findUserByUsername(username);
+  Future<Authentication> execute(String username, String password) async {
+    return await userRepository.login(username, password);
   }
 }

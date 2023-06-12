@@ -1,4 +1,4 @@
-import '../entities/userD.dart';
+import '../entities/user.dart';
 import '../repositories/user_repository.dart';
 
 class ViewProfileUseCase {
@@ -6,7 +6,7 @@ class ViewProfileUseCase {
 
   ViewProfileUseCase(this.userRepository);
 
-  Future<UserD> execute(String username, String password) async {
+  Future<User> execute(String username) async {
     return await userRepository.findUserByUsername(username);
   }
 }
