@@ -14,17 +14,13 @@ class CommentRemoteDataSourceImp extends CommentRemoteDataSource {
   String ip = "192.168.191.32:8000";
 
   @override
-  Future<void> commentPost(Comment comment) async{
+  Future<void> commentPost(Comment comment) async {
     var url = Uri.http(ip, '/api/v1/comments/');
     var headers = {
       'Authorization': 'Token e7a1e4408a2d67ce8e74606d09efe956e9d8f3f6',
       'Content-Type': 'application/json',
     };
-    var postItem = {
-      "user": 1,
-      "text": comment.text,
-      "post": comment.post
-    };
+    var postItem = {"user": 1, "text": comment.text, "post": comment.post};
 
     await http
         .post(url, body: convert.jsonEncode(postItem), headers: headers)
@@ -59,7 +55,7 @@ class CommentRemoteDataSourceImp extends CommentRemoteDataSource {
       throw Exception();
     }
   }
-  
+
   @override
   Future<void> likeAPost(int postId) async {
     print('Entro al metodo put');
@@ -73,4 +69,3 @@ class CommentRemoteDataSourceImp extends CommentRemoteDataSource {
         .then((value) => print(value.body));
   }
 }
-
