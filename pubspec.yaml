@@ -45,6 +45,7 @@ dependencies:
   shared_preferences: ^2.1.2
   image_picker: ^0.8.8
   flutter_svg: ^2.0.7
+  floating_bottom_navigation_bar: ^1.5.2
   
 
 dev_dependencies:

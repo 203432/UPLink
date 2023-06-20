@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uplink/features/posts/presentation/pages/postPage.dart';
 import 'package:uplink/features/users/domain/entities/user.dart';
 import 'package:uplink/features/users/presentation/blocs/user_bloc.dart';
 import 'package:uplink/features/users/presentation/pages/register.dart';
@@ -118,7 +119,12 @@ class _LoginPageState extends State<LoginPage> {
                       width: 150,
                       height: 50,
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const PostPage()));
+                        },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40),
                         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

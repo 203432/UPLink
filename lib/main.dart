@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:uplink/features/posts/presentation/pages/postPage.dart';
+import 'package:uplink/features/users/presentation/pages/register.dart';
 import 'package:uplink/onboarding/onboarding.dart';
 
 void main() => runApp(const MyApp());
