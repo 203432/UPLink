@@ -30,10 +30,19 @@ class _TestPostState extends State<TestPost> {
             MaterialButton(
               child: Text('boton de lista por usuarios'),
               onPressed: () async {
-                int userId = 1;
+                int userId = 10;
                 print('Entro al boton');
                 BlocProvider.of<PostBloc>(context)
                     .add(GetByUserId(userId: userId));
+              },
+            ),
+            MaterialButton(
+              child: Text('boton para los post de los amigos'),
+              onPressed: () async {
+                int userId = 10;
+                print('Entro al boton');
+                BlocProvider.of<PostFriendsBloc>(context)
+                    .add(GetFriendsPosts(userId: userId));
               },
             ),
             ElevatedButton(

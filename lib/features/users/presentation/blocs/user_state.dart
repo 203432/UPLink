@@ -5,19 +5,26 @@ abstract class UserState {}
 
 class InitialState extends UserState {}
 
-class Loading extends UserState {}
+class LoadingUser extends UserState {}
 
-class Loaded extends UserState {
+class LoadedUser extends UserState {
   final User user;
 
-  Loaded({required this.user});
+  LoadedUser({required this.user});
 }
-class Error extends UserState {
+class ErrorUser extends UserState {
   final String error;
 
-  Error({required this.error});
+  ErrorUser({required this.error});
 }
 
-class Updating extends UserState {}
+class UpdatingUser extends UserState {}
 
-class Updated extends UserState {}
+class UpdatedUser extends UserState {}
+
+class LoginSuccess extends UserState {
+  final String token;
+
+  LoginSuccess(this.token);
+}
+

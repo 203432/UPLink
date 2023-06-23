@@ -6,7 +6,7 @@ class ViewProfileUseCase {
 
   ViewProfileUseCase(this.userRepository);
 
-  Future<User> execute(String username) async {
-    return await userRepository.findUserByUsername(username);
+  Future<User> execute(int userId) async {
+    return await userRepository.findUserByUsername(userId);
   }
 }

@@ -4,22 +4,22 @@ part of 'comment_bloc.dart';
 @immutable
 abstract class CommentState {}
 
-class Loading extends CommentState {}
+class LoadingComment extends CommentState {}
 
-class InitialState extends CommentState {}
+class InitialStateComment extends CommentState {}
 
-class Loaded extends CommentState {
+class LoadedComment extends CommentState {
   final List<Comment> comment;
 
-  Loaded({required this.comment});
+  LoadedComment({required this.comment});
 }
 
-class Error extends CommentState {
+class ErrorComment extends CommentState {
   final String error;
 
-  Error({required this.error});
+  ErrorComment({required this.error});
 }
 
-class Updating extends CommentState {}
+class UpdatingComment extends CommentState {}
 
-class Updated extends CommentState {}
+class UpdatedComment extends CommentState {}

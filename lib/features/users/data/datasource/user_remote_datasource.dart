@@ -1,4 +1,5 @@
 import 'package:uplink/features/users/domain/entities/authentication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 
@@ -9,23 +10,33 @@ abstract class UserRemoteDataSource {
   Future<void> logout(User user);
   Future<void> register(User user);
   Future<void> updateInfo(User user);
-  Future<User> viewProfile(String username);
+  Future<User> viewProfile(int userId);
 }
 
 class UserRemoteDataSourceImp extends UserRemoteDataSource {
-  String ip = "192.168.191.32:8000";
+  String ip = "192.168.241.32:8000";
 
+  @override
   Future<Authentication> login(String username, String password) async {
-    print("Entro exitosamente al metodo login");
-    var url = Uri.http(ip, '/api/v1/login/');
-    var body = {'username': username, 'password': password};
-    var headers = {'Content-Type': 'application/json'};
-    await http
-        .post(url, body: convert.jsonEncode(body), headers: headers)
-        .then((response) => {print(response.body)});
-
-    // await prefs.setString('token', );
-    throw Exception('Failed to log in');
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      print("Entro exitosamente al metodo login");
+      var url = Uri.http(ip, '/api/v1/login/');
+      var body = {'username': username, 'password': password};
+      var headers = {'Content-Type': 'application/json'};
+      var res = await http.post(url,
+          body: convert.jsonEncode(body), headers: headers);
+      var responseJson = convert.jsonDecode(res.body);
+      var authentication = Authentication(
+          token: responseJson['token'],
+          user_id: responseJson['user_id'].toString());
+      await prefs.setString("Token", authentication.token);
+      await prefs.setString("id", authentication.user_id);
+      return authentication;
+    } catch (e) {
+      print(e);
+      throw Exception('Failed to log in');
+    }
   }
 
   Future<void> logout(User user) async {}
@@ -47,15 +58,33 @@ class UserRemoteDataSourceImp extends UserRemoteDataSource {
 
   Future<void> updateInfo(User user) async {}
 
-  Future<User> viewProfile(String username) async {
-    print('entrando al metodo viewprofile');
-    var headers = {
-      'Authorization': 'Token e7a1e4408a2d67ce8e74606d09efe956e9d8f3f6'
-    };
-    var url = Uri.http(ip, '/api/v1/profile/user/$username');
-    var response = await http
-        .get(url, headers: headers)
-        .then((response) => print(response.body));
-    throw Exception('Failed to log in');
+  Future<User> viewProfile(int userId) async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      final String? token = prefs.getString('Token');
+      final String? user_id = prefs.getString('id');
+      print('entrando al metodo viewprofile');
+      var headers = {'Authorization': 'Token $token'};
+      var url = Uri.http(ip, '/api/v1/profile/id/$user_id');
+      var response = await http.get(url, headers: headers);
+      var responseBody = response.body;
+      var responseJson = convert.jsonDecode(responseBody);
+      var profileJson = responseJson['profile'];
+      var user = User(
+        id_user: responseJson['pk'],
+        first_name: responseJson['first_name'],
+        last_name: responseJson['last_name'],
+        username: responseJson['username'],
+        email: responseJson['email'],
+        password: '',
+        id_profile: profileJson['id'],
+        url_image: profileJson['url_image'].toString(),
+        description: profileJson['description'].toString(),
+      );
+      return user;
+    } catch (e) {
+      print(e);
+      throw Exception(e);
+    }
   }
 }

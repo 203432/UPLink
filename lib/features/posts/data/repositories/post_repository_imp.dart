@@ -33,4 +33,10 @@ class PostRepositoryImp implements PostRepository {
   Future<void> updatePost(Post post) async {
     return await postRemoteDataSource.updatePost(post);
   }
+
+  
+  @override
+  Future<List<Post>> getPostsFromFriends(int userId)async {
+    return await postRemoteDataSource.getPostsFromFriends(userId);
+  }
 }

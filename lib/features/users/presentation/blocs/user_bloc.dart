@@ -15,13 +15,13 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
   UserBloc({required this.viewProfileUseCase}) : super(InitialState()) {
     on<UserEvent>((event, emit) async {
-      if (event is GetByUsername){
-        try{
-          emit(Loading());
-          User response = await viewProfileUseCase.execute(event.username);
-          emit(Loaded(user: response));
-        } catch(e){
-          emit(Error(error: e.toString()));
+      if (event is GetByUsername) {
+        try {
+          emit(LoadingUser());
+          User response = await viewProfileUseCase.execute(event.userId);
+          emit(LoadedUser(user: response));
+        } catch (e) {
+          emit(ErrorUser(error: e.toString()));
         }
       }
     });
@@ -34,24 +34,25 @@ class UserAuthentication extends Bloc<UserEvent, UserState> {
 
   UserAuthentication(
       {required this.loginUseCase, required this.registerUseCase})
-      : super(Updating()) {
+      : super(UpdatingUser()) {
     on<UserEvent>((event, emit) async {
       if (event is Login) {
         try {
-          emit(Updating());
-          await loginUseCase.execute(event.username, event.password);
-          emit(Updated());
+          emit(UpdatingUser());
+          var auth = await loginUseCase.execute(event.username, event.password);
+          print('estas dentro del bloc');
+          emit(LoginSuccess(auth.token));
         } catch (e) {
-          emit(Error(error: e.toString()));
+          emit(ErrorUser(error: e.toString()));
         }
       } else if (event is Register) {
         try {
-          emit(Updating());
+          emit(UpdatingUser());
           print('Esta entrand al bloc');
           await registerUseCase.execute(event.user);
-          emit(Updated());
+          emit(UpdatedUser());
         } catch (e) {
-          emit(Error(error: e.toString()));
+          emit(ErrorUser(error: e.toString()));
         }
       }
     });

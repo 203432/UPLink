@@ -3,9 +3,9 @@ part of 'user_bloc.dart';
 abstract class UserEvent {}
 
 class GetByUsername extends UserEvent {
-  final String username;
+  final int userId;
 
-  GetByUsername({required this.username});
+  GetByUsername({required this.userId});
 }
 
 class Login extends UserEvent {

@@ -8,6 +8,12 @@ class GetByUserId extends PostEvent {
   GetByUserId({required this.userId});
 }
 
+class GetFriendsPosts extends PostEvent{
+  final int userId;
+
+  GetFriendsPosts({required this.userId});
+}
+
 class Posting extends PostEvent {
   final Post post;
 

@@ -10,7 +10,6 @@ class UserModel extends User {
     required String password,
     required int id_profile,
     required String url_image,
-  // List<int> friendsList;,
     required String description,
 
   }) : super(

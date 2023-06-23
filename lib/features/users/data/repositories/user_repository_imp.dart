@@ -21,8 +21,8 @@ class UserRepositoryImp implements UserRepository {
   }
 
   @override
-  Future<User> findUserByUsername(String username) async {
-    return await userRemoteDataSource.viewProfile(username);
+  Future<User> findUserByUsername(int userId) async {
+    return await userRemoteDataSource.viewProfile(userId);
   }
 
   @override

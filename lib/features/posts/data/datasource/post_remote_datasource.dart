@@ -1,3 +1,5 @@
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../domain/entities/post.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
@@ -10,16 +12,21 @@ abstract class PostRemoteDataSource {
   Future<void> updatePost(Post post);
   Future<void> deletePost(String postId);
   Future<List<Post>> getPostsByUserId(int userId);
+  Future<List<Post>> getPostsFromFriends(int userId);
 }
 
 class PostRemoteDataSourceImp extends PostRemoteDataSource {
-  String ip = "192.168.191.32:8000";
+  String ip = "192.168.241.32:8000";
 
   @override
   Future<void> createPost(Post post) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await Future.delayed(const Duration(seconds: 2));
+    final String? token = prefs.getString('Token');
+    final String? user_id = prefs.getString('id');
     var url = Uri.http(ip, '/api/v1/post/');
     var headers = {
-      'Authorization': 'Token e7a1e4408a2d67ce8e74606d09efe956e9d8f3f6',
+      'Authorization': 'Token $token',
       'Content-Type': 'application/json',
     };
     var postItem = {
@@ -33,13 +40,15 @@ class PostRemoteDataSourceImp extends PostRemoteDataSource {
   }
 
   @override
-  Future<void> deletePost(String postId) async{
+  Future<void> deletePost(String postId) async {
     var url = Uri.http(ip, '/api/v1/post/$postId');
     var headers = {
       'Authorization': 'Token e7a1e4408a2d67ce8e74606d09efe956e9d8f3f6',
       'Content-Type': 'application/json',
     };
-    var response = await http.delete(url, headers: headers).then((value) => print(value.body));
+    var response = await http
+        .delete(url, headers: headers)
+        .then((value) => print(value.body));
   }
 
   @override
@@ -50,24 +59,41 @@ class PostRemoteDataSourceImp extends PostRemoteDataSource {
 
   @override
   Future<List<Post>> getPostsByUserId(int userId) async {
-    print('Entro al metodo de getpostbyuserid');
-    var headers = {
-      'Authorization': 'Token e7a1e4408a2d67ce8e74606d09efe956e9d8f3f6'
-    };
-    var url = Uri.http(ip, '/api/v1/post/by_user/$userId');
-    var response = await http.get(url, headers: headers).then((value) {
-      print(value.statusCode);
-      print(value.body);
-    });
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<Map<String, dynamic>> resultList = [];
+      await Future.delayed(const Duration(seconds: 2));
+      final String? token = prefs.getString('Token');
+      final String? user_id = prefs.getString('id');
+      print('Entro al metodo de getpostbyuserid');
+      var headers = {'Authorization': 'Token $token'};
+      var url = Uri.http(ip, '/api/v1/post/by_user/$user_id');
+      var response = await http.get(url, headers: headers);
+      var jsonResponse = convert.jsonDecode(response.body);
+      var results = jsonResponse['results'];
+      print(results.length);
+      resultList.addAll(List<Map<String, dynamic>>.from(results));
+      List<Post> postList = resultList.map((result) {
+        return Post(
+          id: result['id'],
+          user: result['user'],
+          text: result['text'],
+          published: result['published'],
+          media: result['media'].toString(),
+          image: result['image'].toString(),
+          num_likes: result['num_likes'],
+        );
+      }).toList();
 
-    if (response.statusCode == 200) {
-      var returnData = convert
-          .jsonDecode(response.body)
-          .map<PostModel>((data) => PostModel.fromJson(data))
-          .toList();
-      return returnData;
-    } else {
-      throw Exception();
+      for (var post in postList) {
+        print(post.text);
+        print(post.id);
+      }
+
+      return postList;
+    } catch (e) {
+      print(e);
+      throw Exception(e);
     }
   }
 
@@ -85,5 +111,57 @@ class PostRemoteDataSourceImp extends PostRemoteDataSource {
     var response = await http
         .put(url, body: convert.jsonEncode(body), headers: headers)
         .then((value) => print(value.body));
+  }
+
+  @override
+  Future<List<Post>> getPostsFromFriends(int userId) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await Future.delayed(const Duration(seconds: 2));
+    final String? token = prefs.getString('Token');
+    final String? user_id = prefs.getString('id');
+    try {
+      print('Entro al metodo de getpostbyuserid');
+      var headers = {'Authorization': 'Token $token'};
+      var urlFriendsList = Uri.http(ip, '/api/v1/profile/friend/$user_id');
+      var responseFriendList = await http.get(urlFriendsList, headers: headers);
+      var responseJson = convert.jsonDecode(responseFriendList.body);
+      var friendsList = List<int>.from(responseJson['friends']);
+      print("el body es: ");
+      print(friendsList);
+      List<Map<String, dynamic>> resultList = [];
+      for (var friendId in friendsList) {
+        print('estos son los post del usuaurio: ' + friendId.toString());
+        var url = Uri.http(ip, '/api/v1/post/by_user/$friendId');
+        var response = await http.get(url, headers: headers);
+        print('Respuesta para el amigo con ID $friendId:');
+        var jsonResponse = convert.jsonDecode(response.body);
+        var results = jsonResponse['results'];
+        print(results.length);
+        resultList.addAll(List<Map<String, dynamic>>.from(results));
+      }
+      print(resultList);
+      print(resultList.length);
+      List<Post> postList = resultList.map((result) {
+        return Post(
+          id: result['id'],
+          user: result['user'],
+          text: result['text'],
+          published: result['published'],
+          media: result['media'].toString(),
+          image: result['image'].toString(),
+          num_likes: result['num_likes'],
+        );
+      }).toList();
+
+      for (var post in postList) {
+        print(post.text);
+        print(post.id);
+      }
+
+      return postList;
+    } catch (e) {
+      print(e);
+      throw Exception();
+    }
   }
 }

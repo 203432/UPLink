@@ -8,6 +8,7 @@ import 'package:uplink/features/posts/data/repositories/post_repository_imp.dart
 import 'package:uplink/features/posts/domain/usecase/create_post_usecase.dart';
 import 'package:uplink/features/posts/domain/usecase/delete_post_usecase.dart';
 import 'package:uplink/features/posts/domain/usecase/edit_post_usecase.dart';
+import 'package:uplink/features/posts/domain/usecase/view_friends_usecase.dart';
 import 'package:uplink/features/posts/domain/usecase/view_post_by_userid_usecase.dart';
 import 'package:uplink/features/users/domain/usecase/register_usecase.dart';
 import 'package:uplink/features/users/domain/usecase/view_profile.dart';
@@ -31,6 +32,7 @@ class UsecaseConfig {
   CreatePostUseCase? createPostUseCase;
   PostRepositoryImp? postRepositoryImp;
   PostRemoteDataSourceImp? postRemoteDataSourceImp;
+  ViewFriendsUseCase? viewFriendsUseCase;
 
   //User
   ViewProfileUseCase? viewProfileUseCase;
@@ -57,6 +59,7 @@ class UsecaseConfig {
     createPostUseCase = CreatePostUseCase(postRepositoryImp!);
     editPostUseCase = EditPostUseCase(postRepositoryImp!);
     deletePostUseCase = DeletePostUseCase(postRepositoryImp!);
+    viewFriendsUseCase = ViewFriendsUseCase(postRepositoryImp!);
 
     //User
     userRemoteDataSourceImpl = UserRemoteDataSourceImp();
