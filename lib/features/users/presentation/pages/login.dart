@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _username,
                     text: "usuario",
                   ),
-                  UsernameTextField(
+                  PasswordTextField(
                     controller: _password,
                     text: "contraseña",
                   ),
@@ -52,13 +52,15 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       child: MaterialButton(
                         onPressed: () async {
-                          final SharedPreferences prefs = await SharedPreferences.getInstance();
+                          final SharedPreferences prefs =
+                              await SharedPreferences.getInstance();
                           loginMethod(_username.text, _password.text);
                           await Future.delayed(const Duration(seconds: 5)).then(
                               (value) => Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => PostPage(prefs.getString('Token')))));
+                                      builder: (_) =>
+                                          PostPage(prefs.getString('Token')))));
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40),

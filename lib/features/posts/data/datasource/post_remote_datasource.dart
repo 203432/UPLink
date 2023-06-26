@@ -16,7 +16,7 @@ abstract class PostRemoteDataSource {
 }
 
 class PostRemoteDataSourceImp extends PostRemoteDataSource {
-  String ip = "192.168.241.32:8000";
+  String ip = "192.168.7.32:8000";
 
   @override
   Future<void> createPost(Post post) async {

@@ -10,7 +10,7 @@ abstract class CommentRemoteDataSource {
 }
 
 class CommentRemoteDataSourceImp extends CommentRemoteDataSource {
-  String ip = "192.168.241.32:8000";
+  String ip = "192.168.7.32:8000";
 
   @override
   Future<void> commentPost(Comment comment) async {
@@ -76,8 +76,6 @@ class CommentRemoteDataSourceImp extends CommentRemoteDataSource {
       'Authorization': 'Token e7a1e4408a2d67ce8e74606d09efe956e9d8f3f6',
       'Content-Type': 'application/json',
     };
-    await http
-        .put(url, headers: headers)
-        .then((value) => print(value.body));
+    await http.put(url, headers: headers).then((value) => print(value.body));
   }
 }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uplink/features/interactions/presentation/blocs/comment_bloc.dart';
 import 'package:uplink/features/interactions/presentation/pages/comments.dart';
 import 'package:uplink/features/posts/presentation/blocs/post_bloc.dart';
+import 'package:uplink/features/users/presentation/pages/profile.dart';
 
 class PostPage extends StatefulWidget {
   final String? token;
-  PostPage(this.token);
+  const PostPage(this.token, {super.key});
 
   @override
   State<PostPage> createState() => _PostPageState();
@@ -27,211 +27,146 @@ class _PostPageState extends State<PostPage> {
   int _index = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<PostFriendsBloc, PostState>(builder: (context, state) {
-        if (state is Loading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is Loaded) {
-          return SingleChildScrollView(
-            child: Column(
-                children: state.posts.map((post) {
-              return Container(
-                margin: EdgeInsets.all(5),
-                padding: EdgeInsets.all(5),
-                color: Colors.black12,
-                child: ListTile(
-                  leading: IconButton(
-                    icon: Icon(Icons.comment),
-                    onPressed: () {
-                      print(post.id);
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (_) => CommentsPage(idPost: post.id,)));
-                    },
-                  ),
-                  title: Text(post.text),
-                ),
-              );
-            }).toList()),
-            
-          );
-        } else if (state is Error) {
-          return Center(
-            child: Text(state.error, style: const TextStyle(color: Colors.red)),
-          );
-        } else {
-          return Container(
-            child: Text(widget.token!),
-          );
-        }
-      }),
-      
+    return blocPosts(context);
+  }
 
-      // Container(
-      //   decoration: const BoxDecoration(
-      //     color: Color(0xFFE0E0E0),
-      //   ),
-      //   child: Center(
-      //     child: Column(
-      //       children: [
-      //         Container(
-      //           margin: const EdgeInsets.only(top: 50),
-      //           decoration: BoxDecoration(
-      //             borderRadius: BorderRadius.circular(40),
-      //           ),
-      //           child: Image(
-      //               image: Image.asset(
-      //             'images/logoposts.png',
-      //           ).image),
-      //         ),
-      //         SingleChildScrollView(
-      //           child: Container(
-      //             decoration: const BoxDecoration(
-      //               color: Color(0xFFE0E0E0),
-      //             ),
-      //             child: Container(
-      //               margin: const EdgeInsets.only(top: 20, right: 20, left: 20),
-      //               width: 350,
-      //               decoration: const BoxDecoration(
-      //                 color: Color(0xFFE0E0E0),
-      //               ),
-      //               child: Column(
-      //                 mainAxisAlignment: MainAxisAlignment.center,
-      //                 mainAxisSize: MainAxisSize.max,
-      //                 children: [
-      //                   Container(
-      //                     width: 350,
-      //                     constraints: const BoxConstraints(
-      //                       minHeight: 60,
-      //                       maxHeight: 270,
-      //                     ),
-      //                     margin: const EdgeInsets.only(top: 20),
-      //                     decoration: BoxDecoration(
-      //                         borderRadius: BorderRadius.circular(20),
-      //                         color: const Color(0xFFFFFFFF)),
-      //                     child: Container(
-      //                       decoration: BoxDecoration(
-      //                         borderRadius: BorderRadius.circular(20),
-      //                       ),
-      //                       margin: const EdgeInsets.all(20),
-      //                       child: Column(
-      //                         children: [
-      //                           Container(
-      //                             margin: const EdgeInsets.only(bottom: 0),
-      //                             height: 50,
-      //                             child: Row(
-      //                               children: [
-      //                                 Image(
-      //                                     image: Image.asset(
-      //                                   'images/usertest.png',
-      //                                   scale: 2.5,
-      //                                 ).image),
-      //                                 Column(
-      //                                   children: const [
-      //                                     Text(
-      //                                       'Username',
-      //                                       style: TextStyle(
-      //                                         fontSize: 12,
-      //                                         fontWeight: FontWeight.bold,
-      //                                       ),
-      //                                     ),
-      //                                     Text(
-      //                                       "Description",
-      //                                       style: TextStyle(fontSize: 10),
-      //                                     ),
-      //                                   ],
-      //                                 ),
-      //                               ],
-      //                             ),
-      //                           ),
-      //                           Container(
-      //                             margin: const EdgeInsets.only(bottom: 0),
-      //                             width: 350,
-      //                             child: const Text(
-      //                               'LOREM IMPSUM DOLOR SIT AMET',
-      //                               style: TextStyle(fontSize: 10),
-      //                             ),
-      //                           ),
-      //                           Container(
-      //                             margin: const EdgeInsets.only(bottom: 0),
-      //                             width: 350,
-      //                             child: Image(
-      //                               image: Image.asset('images/posttest.png')
-      //                                   .image,
-      //                             ),
-      //                           ),
-      //                           Container(
-      //                             margin: const EdgeInsets.only(
-      //                                 left: 80, bottom: 0),
-      //                             decoration: const BoxDecoration(
-      //                                 borderRadius: BorderRadius.only(),
-      //                                 color: Color(0xFFE1A9FF)),
-      //                             height: 30,
-      //                             width: 270,
-      //                             child: Row(
-      //                               mainAxisAlignment: MainAxisAlignment.end,
-      //                               children: [
-      //                                 Container(
-      //                                   margin:
-      //                                       const EdgeInsets.only(right: 60),
-      //                                   child: Row(
-      //                                     children: const [
-      //                                       Icon(
-      //                                         Icons.favorite_border,
-      //                                       ),
-      //                                       Text(
-      //                                         '10',
-      //                                         style: TextStyle(fontSize: 7),
-      //                                       ),
-      //                                     ],
-      //                                   ),
-      //                                 ),
-      //                                 Container(
-      //                                   margin:
-      //                                       const EdgeInsets.only(right: 50),
-      //                                   child: Row(
-      //                                     children: const [
-      //                                       Icon(
-      //                                         Icons.comment_outlined,
-      //                                       ),
-      //                                       Text(
-      //                                         '10',
-      //                                         style: TextStyle(fontSize: 7),
-      //                                       ),
-      //                                     ],
-      //                                   ),
-      //                                 ),
-      //                               ],
-      //                             ),
-      //                           )
-      //                         ],
-      //                       ),
-      //                     ),
-      //                   ),
-      //                 ],
-      //               ),
-      //             ),
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
+  final screens = [
+    const NewWidget(),
+    ProfilePage(),
+    const NewWidget(),
+    const NewWidget(),
+    const NewWidget(),
+  ];
+  Scaffold blocPosts(BuildContext context) {
+    return Scaffold(
+      body: screens[_index],
       extendBody: true,
-      bottomNavigationBar: FloatingNavbar(
-        backgroundColor: const Color(0xFF712F94).withOpacity(0.8),
-        onTap: (int val) => setState(() => _index = val),
-        currentIndex: _index,
-        items: [
-          FloatingNavbarItem(icon: Icons.home, title: 'Home'),
-          FloatingNavbarItem(icon: Icons.person, title: 'Profile'),
-          FloatingNavbarItem(icon: Icons.add_circle),
-          FloatingNavbarItem(icon: Icons.search, title: 'Search'),
-          FloatingNavbarItem(icon: Icons.settings, title: 'Settings'),
-        ],
-      ),
+      resizeToAvoidBottomInset: false,
+      bottomNavigationBar: bottomNav(context),
     );
+  }
+
+  Container bottomNav(BuildContext context) {
+    return Container(
+      height: 60,
+      margin: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(25),
+      ),
+      child: BottomNavigationBar(
+          type: BottomNavigationBarType.shifting,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white.withOpacity(0.5),
+          elevation: 0,
+          currentIndex: _index,
+          onTap: (int index) {
+            setState(() {
+              _index = index;
+            });
+            print(index);
+          },
+          items: [
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home),
+              label: "Inicio",
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.search),
+              label: "Buscar",
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.add),
+              label: "Agregar",
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person),
+              label: "Perfil",
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.settings),
+              label: "Ajustes",
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
+            ),
+          ]),
+    );
+  }
+}
+
+class NewWidget extends StatelessWidget {
+  const NewWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<PostFriendsBloc, PostState>(builder: (context, state) {
+      if (state is Loading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (state is Loaded) {
+        return SingleChildScrollView(
+          child: Column(
+              children: state.posts.map((post) {
+            return Container(
+              margin: const EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
+              color: Colors.black12,
+              child: ListTile(
+                leading: IconButton(
+                  icon: const Icon(Icons.comment),
+                  onPressed: () {
+                    print(post.id);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => CommentsPage(
+                                  idPost: post.id,
+                                )));
+                  },
+                ),
+                title: Text(post.text),
+              ),
+            );
+          }).toList()),
+        );
+      } else if (state is Error) {
+        return Center(
+          // child: Text(state.error, style: const TextStyle(color: Colors.red)),
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(color: Color(0xffE0E0E0)),
+            child: Container(
+              margin: const EdgeInsets.only(top: 50, left: 20, right: 20),
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: const Image(
+                      height: 30,
+                      image: AssetImage(
+                        'images/logo.png',
+                      ),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      } else {
+        return Container(
+          child: const Text("no hay post"),
+        );
+      }
+    });
   }
 }
 
@@ -253,8 +188,8 @@ void CommentsWindow(String title, String content, BuildContext context) {
                     child: Column(
                         children: state.comment.map((comment) {
                       return Container(
-                        margin: EdgeInsets.all(5),
-                        padding: EdgeInsets.all(5),
+                        margin: const EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         color: Colors.black12,
                         child: ListTile(
                           title: Text(comment.text),
@@ -269,7 +204,7 @@ void CommentsWindow(String title, String content, BuildContext context) {
                   );
                 } else {
                   return Container(
-                    child: Text("comentarios ventanta"),
+                    child: const Text("comentarios ventanta"),
                   );
                 }
               }),

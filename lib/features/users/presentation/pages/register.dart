@@ -176,6 +176,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 50,
                     child: TextField(
                       controller: _password,
+                      obscureText: true,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(
@@ -203,6 +204,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     height: 50,
                     child: TextField(
                       controller: _passwordAgain,
+                      obscureText: true,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(

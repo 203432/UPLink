@@ -14,7 +14,7 @@ abstract class UserRemoteDataSource {
 }
 
 class UserRemoteDataSourceImp extends UserRemoteDataSource {
-  String ip = "192.168.241.32:8000";
+  String ip = "192.168.7.32:8000";
 
   @override
   Future<Authentication> login(String username, String password) async {
