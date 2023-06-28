@@ -10,7 +10,7 @@ abstract class CommentRemoteDataSource {
 }
 
 class CommentRemoteDataSourceImp extends CommentRemoteDataSource {
-  String ip = "192.168.7.32:8000";
+  String ip = "192.168.208.32:8000";
 
   @override
   Future<void> commentPost(Comment comment) async {

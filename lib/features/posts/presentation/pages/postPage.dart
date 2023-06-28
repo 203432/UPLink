@@ -73,8 +73,8 @@ class _PostPageState extends State<PostPage> {
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.search),
-              label: "Buscar",
+              icon: const Icon(Icons.person),
+              label: "Mi perfil",
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
             ),
             BottomNavigationBarItem(
@@ -83,8 +83,8 @@ class _PostPageState extends State<PostPage> {
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
             ),
             BottomNavigationBarItem(
-              icon: const Icon(Icons.person),
-              label: "Perfil",
+              icon: const Icon(Icons.search),
+              label: "Buscar",
               backgroundColor: Theme.of(context).primaryColor.withOpacity(0),
             ),
             BottomNavigationBarItem(
@@ -104,124 +104,88 @@ class NewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PostFriendsBloc, PostState>(builder: (context, state) {
-      if (state is Loading) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (state is Loaded) {
-        return SingleChildScrollView(
-          child: Column(
-              children: state.posts.map((post) {
-            return Container(
-              margin: const EdgeInsets.all(5),
-              padding: const EdgeInsets.all(5),
-              color: Colors.black12,
-              child: ListTile(
-                leading: IconButton(
-                  icon: const Icon(Icons.comment),
-                  onPressed: () {
-                    print(post.id);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (_) => CommentsPage(
-                                  idPost: post.id,
-                                )));
-                  },
-                ),
-                title: Text(post.text),
-              ),
-            );
-          }).toList()),
-        );
-      } else if (state is Error) {
-        return Center(
-          // child: Text(state.error, style: const TextStyle(color: Colors.red)),
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(color: Color(0xffE0E0E0)),
-            child: Container(
-              margin: const EdgeInsets.only(top: 50, left: 20, right: 20),
-              child: Column(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(5),
-                    child: const Image(
-                      height: 30,
-                      image: AssetImage(
-                        'images/logo.png',
-                      ),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
-                ],
+    return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 192, 192, 192),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 20, bottom: 20),
+              width: 200,
+              child: Image(
+                image: Image.asset('images/logoposts.png').image,
+                width: 200,
               ),
             ),
-          ),
-        );
-      } else {
-        return Container(
-          child: const Text("no hay post"),
-        );
-      }
-    });
-  }
-}
-
-void CommentsWindow(String title, String content, BuildContext context) {
-  showDialog(
-      context: context,
-      builder: (buildcontext) {
-        return AlertDialog(
-          title: Text(title),
-          content: Column(
-            children: [
-              BlocBuilder<CommentBloc, CommentState>(builder: (context, state) {
-                if (state is LoadingComment) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (state is LoadedComment) {
-                  return SingleChildScrollView(
-                    child: Column(
-                        children: state.comment.map((comment) {
-                      return Container(
-                        margin: const EdgeInsets.all(5),
-                        padding: const EdgeInsets.all(5),
-                        color: Colors.black12,
-                        child: ListTile(
-                          title: Text(comment.text),
+            BlocBuilder<PostFriendsBloc, PostState>(builder: (context, state) {
+              if (state is Loading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (state is Loaded) {
+                return Center(
+                  child: Column(
+                      children: state.posts.map((post) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 30),
+                      child: Container(
+                        width: 375.5,
+                        height: 360,
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            borderRadius: BorderRadius.circular(37.0),
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: Colors.black,
+                                  offset: Offset(8.0, 4.0),
+                                  blurRadius: 20.0,
+                                  spreadRadius: 0.0)
+                            ]),
+                        child: Column(
+                          children: [
+                            Text(post.text),
+                          ],
                         ),
-                      );
-                    }).toList()),
-                  );
-                } else if (state is ErrorComment) {
-                  return Center(
-                    child: Text(state.error,
-                        style: const TextStyle(color: Colors.red)),
-                  );
-                } else {
-                  return Container(
-                    child: const Text("comentarios ventanta"),
-                  );
-                }
-              }),
-              Text(content),
-            ],
-          ),
-          actions: <Widget>[
-            ElevatedButton(
-              child: const Text(
-                "CERRAR",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
+                      ),
+                    );
+                  }).toList()),
+                );
+              } else if (state is Error) {
+                return Center(
+                  // child: Text(state.error, style: const TextStyle(color: Colors.red)),
+                  child: Container(
+                    width: double.infinity,
+                    height: double.infinity,
+                    decoration: const BoxDecoration(color: Color(0xffE0E0E0)),
+                    child: Container(
+                      margin:
+                          const EdgeInsets.only(top: 50, left: 20, right: 20),
+                      child: Column(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(5),
+                            child: const Image(
+                              height: 30,
+                              image: AssetImage(
+                                'images/logo.png',
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return Container(
+                  child: const Text("no hay post"),
+                );
+              }
+            }),
           ],
-        );
-      });
+        ),
+      ),
+    );
+  }
 }

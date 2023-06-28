@@ -14,7 +14,7 @@ abstract class UserRemoteDataSource {
 }
 
 class UserRemoteDataSourceImp extends UserRemoteDataSource {
-  String ip = "192.168.7.32:8000";
+  String ip = "192.168.208.32:8000";
 
   @override
   Future<Authentication> login(String username, String password) async {
@@ -64,12 +64,16 @@ class UserRemoteDataSourceImp extends UserRemoteDataSource {
       final String? token = prefs.getString('Token');
       final String? user_id = prefs.getString('id');
       print('entrando al metodo viewprofile');
+      print('Lista de amigos');
       var headers = {'Authorization': 'Token $token'};
       var url = Uri.http(ip, '/api/v1/profile/id/$user_id');
       var response = await http.get(url, headers: headers);
       var responseBody = response.body;
       var responseJson = convert.jsonDecode(responseBody);
       var profileJson = responseJson['profile'];
+      print(
+        profileJson['url_image'].toString(),
+      );
       var user = User(
         id_user: responseJson['pk'],
         first_name: responseJson['first_name'],
@@ -80,7 +84,10 @@ class UserRemoteDataSourceImp extends UserRemoteDataSource {
         id_profile: profileJson['id'],
         url_image: profileJson['url_image'].toString(),
         description: profileJson['description'].toString(),
+        friends: List<int>.from(
+            profileJson['friends'].map((friend) => friend as int)),
       );
+      print(user.friends);
       return user;
     } catch (e) {
       print(e);

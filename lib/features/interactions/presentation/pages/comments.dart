@@ -28,6 +28,7 @@ class _CommentsPageState extends State<CommentsPage> {
   int _index = 0;
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -95,18 +96,6 @@ class _CommentsPageState extends State<CommentsPage> {
         ),
       ),
       extendBody: true,
-      bottomNavigationBar: FloatingNavbar(
-        backgroundColor: const Color(0xFF712F94).withOpacity(0.8),
-        onTap: (int val) => setState(() => _index = val),
-        currentIndex: _index,
-        items: [
-          FloatingNavbarItem(icon: Icons.home, title: 'Home'),
-          FloatingNavbarItem(icon: Icons.person, title: 'Profile'),
-          FloatingNavbarItem(icon: Icons.add_circle),
-          FloatingNavbarItem(icon: Icons.search, title: 'Search'),
-          FloatingNavbarItem(icon: Icons.settings, title: 'Settings'),
-        ],
-      ),
     );
   }
 }

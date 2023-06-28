@@ -7,7 +7,7 @@ class User{
   String password;
   int id_profile;
   String url_image;
-  // List<int> friendsList;
+  List<int> friends;
   String description;
 
   User({
@@ -19,7 +19,7 @@ class User{
     required this.password,
     required this.id_profile,
     required this.url_image,
-    // required this.friendsList,
+    required this.friends,
     required this.description,
   });
 }

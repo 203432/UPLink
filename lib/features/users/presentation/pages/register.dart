@@ -297,7 +297,8 @@ class _RegisterPageState extends State<RegisterPage> {
           password: password,
           id_profile: 0,
           url_image: "",
-          description: "");
+          description: "",
+          friends: []);
       BlocProvider.of<UserAuthentication>(context).add(Register(user: user));
       showAlertDialog(
           "Registrado con exito", "Por favor, inicia sesion ahora", context);
