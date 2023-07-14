@@ -33,7 +33,6 @@ class UserRepositoryImp implements UserRepository {
 
   @override
   Future<void> register(User user) async {
-    print('llegaaa aqui');
     return await userRemoteDataSource.register(user);
   }
 }
