@@ -36,4 +36,9 @@ class UserRepositoryImp implements UserRepository {
     print('llegaaa aqui');
     return await userRemoteDataSource.register(user);
   }
+
+  @override
+  Future<List<User>> getAllUsers() async {
+    return await userRemoteDataSource.getAllUsers();
+  }
 }

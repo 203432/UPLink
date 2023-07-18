@@ -66,7 +66,11 @@ class _TestPostState extends State<TestPost> {
                     published: '',
                     media: '',
                     image: '',
-                    num_likes: 0);
+                    num_likes: 0,
+                    location: '',
+                    first_name: '',
+                    last_name: '',
+                    url_image: '');
                 print('Entro al boton');
                 BlocProvider.of<PostBlocModify>(context)
                     .add(Posting(post: post));
@@ -80,9 +84,13 @@ class _TestPostState extends State<TestPost> {
                     user: 0,
                     text: 'cesar 2',
                     published: '',
+                    location: '',
                     media: '',
                     image: '',
-                    num_likes: 0);
+                    num_likes: 0,
+                    first_name: '',
+                    last_name: '',
+                    url_image: '');
                 print('Entro al boton');
                 BlocProvider.of<PostBlocModify>(context)
                     .add(UpdatePost(post: post));
@@ -119,7 +127,13 @@ class _TestPostState extends State<TestPost> {
               child: Text('Comentar'),
               onPressed: () async {
                 var comment = Comment(
-                    id: 0, user: 0, post: 5, text: "Comentando el quinto post");
+                    id: 0,
+                    user: 0,
+                    post: 5,
+                    text: "Comentando el quinto post",
+                    first_name: '',
+                    last_name: '',
+                    url_image: '');
                 var postId = 5;
                 print('Entro al boton');
                 BlocProvider.of<CommentBlocModify>(context)

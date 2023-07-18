@@ -8,4 +8,5 @@ abstract class UserRepository {
   Future<void> updateUser(User user);
   Future<void> deleteUser(String userId);
   Future<Authentication> login(String username, String password);
+  Future<List<User>> getAllUsers();
 }

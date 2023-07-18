@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (_) =>
-                                          PostPage(prefs.getString('Token')))));
+                                          const PostPage())));
                         },
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40),

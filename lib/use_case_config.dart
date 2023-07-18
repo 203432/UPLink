@@ -1,3 +1,7 @@
+import 'package:uplink/features/friends/data/datasource/friend_remote_datasource.dart';
+import 'package:uplink/features/friends/data/repositories/friend_repository_imp.dart';
+import 'package:uplink/features/friends/domain/repositories/friend_repository.dart';
+import 'package:uplink/features/friends/domain/usecase/add_friend_usecase.dart';
 import 'package:uplink/features/interactions/data/datasource/comment_remote_datasource.dart';
 import 'package:uplink/features/interactions/data/repositories/comment_repository_imp.dart';
 import 'package:uplink/features/interactions/domain/usecase/comment_post_usecase.dart';
@@ -15,9 +19,15 @@ import 'package:uplink/features/users/domain/usecase/view_profile.dart';
 
 import 'features/users/data/datasource/user_remote_datasource.dart';
 import 'features/users/data/repositories/user_repository_imp.dart';
+import 'features/users/domain/usecase/get_all_users_usecase.dart';
 import 'features/users/domain/usecase/login_usecase.dart';
 
 class UsecaseConfig {
+  //Friends
+  AddFriendUseCase? addFriendUseCase;
+  FriendsRepositoryImp? friendsRepositoryImp;
+  FriendRemoteDataSourceImp? friendRemoteDataSourceImp;
+
   //Comments
   ViewCommentsOnPostUseCase? viewCommentsOnPostUseCase;
   CommentRepositoryImp? commentRepositoryImp;
@@ -38,10 +48,17 @@ class UsecaseConfig {
   ViewProfileUseCase? viewProfileUseCase;
   LoginUseCase? loginUseCase;
   RegisterUseCase? registerUseCase;
+  GetAllUsersUseCase? getAllUsersUseCase;
   UserRepositoryImp? userRepositoryImpl;
   UserRemoteDataSourceImp? userRemoteDataSourceImpl;
 
   UsecaseConfig() {
+    //Friends
+    friendRemoteDataSourceImp = FriendRemoteDataSourceImp();
+    friendsRepositoryImp = FriendsRepositoryImp(
+        friendRemoteDataSource: friendRemoteDataSourceImp!);
+    addFriendUseCase = AddFriendUseCase(friendsRepositoryImp!);
+
     //Comments
     commentRemoteDataSourceImp = CommentRemoteDataSourceImp();
     commentRepositoryImp = CommentRepositoryImp(
@@ -68,5 +85,6 @@ class UsecaseConfig {
     loginUseCase = LoginUseCase(userRepositoryImpl!);
     registerUseCase = RegisterUseCase(userRepositoryImpl!);
     viewProfileUseCase = ViewProfileUseCase(userRepositoryImpl!);
+    getAllUsersUseCase = GetAllUsersUseCase(userRepositoryImpl!);
   }
 }

@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uplink/features/interactions/presentation/blocs/comment_bloc.dart';
-import 'package:uplink/features/interactions/presentation/pages/comments.dart';
 import 'package:uplink/features/posts/presentation/blocs/post_bloc.dart';
+import 'package:uplink/features/posts/presentation/pages/postear.dart';
+import 'package:uplink/features/users/presentation/pages/logout.dart';
 import 'package:uplink/features/users/presentation/pages/profile.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:video_player/video_player.dart';
+
+import '../../../interactions/presentation/pages/comments.dart';
+import '../../../users/presentation/pages/users_list.dart';
 
 class PostPage extends StatefulWidget {
-  final String? token;
-  const PostPage(this.token, {super.key});
+  const PostPage({Key? key}) : super(key: key);
 
   @override
   State<PostPage> createState() => _PostPageState();
 }
 
 class _PostPageState extends State<PostPage> {
-  late PostFriendsBloc _postFriendsBloc;
+  VideoPlayerController? _videoPlayerController;
+
+  @override
+  void dispose() {
+    _videoPlayerController?.dispose();
+    // _audioPlayer.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -33,9 +44,9 @@ class _PostPageState extends State<PostPage> {
   final screens = [
     const NewWidget(),
     ProfilePage(),
-    const NewWidget(),
-    const NewWidget(),
-    const NewWidget(),
+    PostearPage(),
+    UsersListPage(),
+    LogoutPage(),
   ];
   Scaffold blocPosts(BuildContext context) {
     return Scaffold(
@@ -105,7 +116,7 @@ class NewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 192, 192, 192),
+      backgroundColor: const Color(0xFFE0E0E0),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -129,8 +140,8 @@ class NewWidget extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 30),
                       child: Container(
+                        constraints: BoxConstraints(minHeight: 200),
                         width: 375.5,
-                        height: 360,
                         decoration: BoxDecoration(
                             color: const Color.fromARGB(255, 255, 255, 255),
                             borderRadius: BorderRadius.circular(37.0),
@@ -143,7 +154,80 @@ class NewWidget extends StatelessWidget {
                             ]),
                         child: Column(
                           children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 10, top: 20),
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  radius: 30,
+                                  backgroundImage: post.url_image != 'null'
+                                      ? NetworkImage(post.url_image)
+                                      : null,
+                                  backgroundColor: post.url_image != 'null'
+                                      ? Colors.black
+                                      : Colors.grey,
+                                ),
+                                title: Text(
+                                  '${post.first_name} ${post.last_name}',
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                subtitle:
+                                    Text('Publicado el: ${post.published}'),
+                              ),
+                            ),
                             Text(post.text),
+                            post.location == 'null'
+                                ? Container()
+                                : ElevatedButton(
+                                    onPressed: () {
+                                      openMap(post.location);
+                                    },
+                                    child: const Text('Ver ubicacion')),
+                            post.image == 'null'
+                                ? Container()
+                                : Image(image: NetworkImage(post.image)),
+                            post.media == 'null' ? Container() : Container(),
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 30, left: 100, bottom: 30),
+                              child: Container(
+                                  width: 300,
+                                  height: 40,
+                                  decoration: const BoxDecoration(
+                                      color: Color(0x40E1A9FF),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10))),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(Icons.favorite_border),
+                                          const SizedBox(
+                                              width:
+                                                  4.0), // Espacio opcional entre el icono y el texto
+                                          Text(post.num_likes.toString()),
+                                        ],
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          print(post.id);
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (_) => CommentsPage(
+                                                      idPost: post.id,
+                                                      name:
+                                                          '${post.first_name} ${post.last_name}')));
+                                        },
+                                        icon: const Icon(Icons.comment),
+                                      )
+                                    ],
+                                  )),
+                            )
                           ],
                         ),
                       ),
@@ -187,5 +271,19 @@ class NewWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> openMap(String location) async {
+    List<String> coordenadasSeparadas = location.split(',');
+
+    String variable1 = coordenadasSeparadas[0];
+    String variable2 = coordenadasSeparadas[1];
+
+    print("Variable 1: $variable1");
+    print("Variable 2: $variable2");
+    String googleURL =
+        'https://www.google.com/maps/search/?api=1&query=$variable1,$variable2';
+    var uri = Uri.parse(googleURL);
+    await canLaunchUrl(uri) ? await launchUrl(uri) : throw 'nopu';
   }
 }

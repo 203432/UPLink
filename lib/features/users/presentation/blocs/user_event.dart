@@ -20,3 +20,7 @@ class Register extends UserEvent {
 
   Register({required this.user});
 }
+
+class GetUsers extends UserEvent{
+  
+}

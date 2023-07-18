@@ -1,6 +1,5 @@
 part of 'user_bloc.dart';
 
-
 abstract class UserState {}
 
 class InitialState extends UserState {}
@@ -12,10 +11,16 @@ class LoadedUser extends UserState {
 
   LoadedUser({required this.user});
 }
+
 class ErrorUser extends UserState {
   final String error;
 
   ErrorUser({required this.error});
+}
+
+class LoadedUserList extends UserState {
+  final List<User> users;
+  LoadedUserList({required this.users});
 }
 
 class UpdatingUser extends UserState {}
@@ -27,4 +32,3 @@ class LoginSuccess extends UserState {
 
   LoginSuccess(this.token);
 }
-

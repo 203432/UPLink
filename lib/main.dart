@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:uplink/features/friends/presentation/bloc/friend_bloc.dart';
 import 'package:uplink/features/interactions/presentation/blocs/comment_bloc.dart';
 import 'package:uplink/features/posts/presentation/blocs/post_bloc.dart';
-import 'package:uplink/features/posts/presentation/pages/postPage.dart';
-import 'package:uplink/features/posts/presentation/pages/test.dart';
 import 'package:uplink/features/users/presentation/pages/login.dart';
-import 'package:uplink/features/users/presentation/pages/profile.dart';
-import 'package:uplink/features/users/presentation/pages/register.dart';
-import 'package:uplink/onboarding/onboarding.dart';
 import 'package:uplink/use_case_config.dart';
 
 import 'features/users/presentation/blocs/user_bloc.dart';
@@ -23,10 +19,16 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+            create: (BuildContext context) =>
+                FriendBloc(addFriendUseCase: usecaseConfig.addFriendUseCase!)),
+        BlocProvider(
           create: (BuildContext context) => UserAuthentication(
               loginUseCase: usecaseConfig.loginUseCase!,
               registerUseCase: usecaseConfig.registerUseCase!),
         ),
+        BlocProvider(
+            create: (BuildContext context) => UserListBloc(
+                getAllUsersUseCase: usecaseConfig.getAllUsersUseCase!)),
         BlocProvider(
           create: (BuildContext context) =>
               UserBloc(viewProfileUseCase: usecaseConfig.viewProfileUseCase!),
@@ -58,7 +60,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: const Color(0xFF712F94),
         ),
-        home: LoginPage(),
+        home: const LoginPage(),
       ),
     );
   }
